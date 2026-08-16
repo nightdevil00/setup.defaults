@@ -56,6 +56,10 @@ This disables the plugin and removes it from
 `~/.config/omarchy/plugins/setup.defaults`. Your configured defaults
 (terminal/editor/browser/video/mail) are left untouched.
 
+## License
+
+[MIT](LICENSE) — see [LICENSE](LICENSE) for the full text.
+
 ## Usage
 
 1. Click the cog icon in the center of the bar (next to Spotify by default).
