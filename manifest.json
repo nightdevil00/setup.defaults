@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "setup.defaults",
+  "name": "Default Apps",
+  "version": "1.0.0",
+  "author": "mihai",
+  "license": "MIT",
+  "description": "Set the default terminal, editor, browser, video player and mail client from any installed app — not just the ones Omarchy ships defaults for.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Default Apps",
+    "description": "Choose default apps for each category",
+    "category": "System",
+    "allowMultiple": false,
+    "defaults": {
+      "iconGlyph": ""
+    },
+    "schema": [
+      {
+        "key": "iconGlyph",
+        "type": "string",
+        "label": "Bar Icon Glyph",
+        "default": "󰓇"
+      }
+    ]
+  }
+}

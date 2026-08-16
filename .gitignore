@@ -1,0 +1,3 @@
+# Quickshell / editor caches
+*.qmlc
+.qmlcache/
