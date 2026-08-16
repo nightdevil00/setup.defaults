@@ -140,25 +140,39 @@ Panel {
         // Category selector
         Row {
           width: parent.width
-          spacing: Style.space(6)
+          spacing: Style.space(8)
           Repeater {
             model: root.categories
             Rectangle {
               required property var modelData
-              width: (panelColumn.width - Style.space(6) * 4) / 5
-              height: 34
-              radius: Style.space(8)
+              width: (panelColumn.width - Style.space(8) * 4) / 5
+              height: 42
+              radius: Style.space(10)
               color: modelData.id === root.selectedCategory
                 ? Color.accent
                 : Qt.rgba(root.fg.r, root.fg.g, root.fg.b, 0.08)
               border.width: 1
               border.color: Qt.rgba(root.fg.r, root.fg.g, root.fg.b, 0.18)
-              Text {
+              Column {
                 anchors.centerIn: parent
-                text: modelData.glyph + " " + modelData.label
-                color: modelData.id === root.selectedCategory ? bg : root.fg
-                font.family: root.fontFam
-                font.pixelSize: Style.font.caption
+                spacing: Style.space(1)
+                Text {
+                  anchors.horizontalCenter: parent.horizontalCenter
+                  text: modelData.glyph
+                  color: modelData.id === root.selectedCategory ? bg : root.fg
+                  font.family: root.fontFam
+                  font.pixelSize: Style.font.title
+                }
+                Text {
+                  anchors.horizontalCenter: parent.horizontalCenter
+                  width: parent.parent.width - Style.space(8)
+                  horizontalAlignment: Text.AlignHCenter
+                  elide: Text.ElideRight
+                  text: modelData.label
+                  color: modelData.id === root.selectedCategory ? bg : root.fg
+                  font.family: root.fontFam
+                  font.pixelSize: Style.font.caption
+                }
               }
               MouseArea {
                 anchors.fill: parent
@@ -221,6 +235,13 @@ Panel {
             font.family: root.fontFam
             font.pixelSize: Style.font.caption
             wrapMode: Text.WordWrap
+          }
+
+          // Fixed bottom spacer so the breathing room below the last entry is
+          // equal across categories regardless of how many defaults exist.
+          Item {
+            width: parent.width
+            implicitHeight: Style.space(12)
           }
         }
       }
