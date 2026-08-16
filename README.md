@@ -31,15 +31,15 @@ manager's "open with", and the rest of the desktop.
 ## Installation
 
 ```bash
-# 1. Clone into your user plugin directory
-git clone git@github.com:nightdevil00/setup.defaults.git \
-  ~/.config/omarchy/plugins/setup.defaults
+omarchy plugin add https://github.com/nightdevil00/setup.defaults.git --enable
+```
 
-# 2. Enable the plugin (adds the cog icon to your bar)
-omarchy plugin enable setup.defaults
+That clones the plugin into `~/.config/omarchy/plugins/setup.defaults` and
+enables it (adding the cog icon to your bar) in one step.
 
-# 3. Open it
-#    Click the cog icon in the bar, or run:
+To open it, click the cog icon in the bar, or run:
+
+```bash
 omarchy-shell shell toggle setup.defaults
 ```
 
