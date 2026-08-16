@@ -87,7 +87,11 @@ Panel {
 
     ScrollView {
       id: scrollArea
-      anchors.fill: parent
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: -panel.padding
       clip: true
       ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
       ScrollBar.vertical.policy: panelColumn.implicitHeight > height ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
@@ -187,14 +191,14 @@ Panel {
         // App list
         Column {
           width: parent.width
-          spacing: Style.space(4)
+          spacing: Style.space(2)
           Repeater {
             model: appModel
             Rectangle {
               required property var modelData
               width: parent.width
-              height: 38
-              radius: Style.space(8)
+              height: 32
+              radius: Style.space(6)
               color: modelData.id === root.currentDefault
                 ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.22)
                 : "transparent"
@@ -203,19 +207,19 @@ Panel {
               Text {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: Style.space(12)
+                anchors.leftMargin: Style.space(10)
                 text: modelData.name
                 color: modelData.id === root.currentDefault ? Color.accent : root.fg
                 font.family: root.fontFam
                 font.pixelSize: Style.font.body
                 elide: Text.ElideRight
-                width: parent.width - (check.visible ? 44 : 24)
+                width: parent.width - (check.visible ? 40 : 20)
               }
               Text {
                 id: check
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: Style.space(12)
+                anchors.rightMargin: Style.space(10)
                 text: "✓"
                 color: Color.accent
                 font.family: root.fontFam
@@ -230,18 +234,12 @@ Panel {
           }
           Text {
             width: parent.width
+            visible: appModel.count === 0
             text: appModel.count === 0 ? "No installed apps detected for this category." : ""
             color: Qt.darker(root.fg, 1.4)
             font.family: root.fontFam
             font.pixelSize: Style.font.caption
             wrapMode: Text.WordWrap
-          }
-
-          // Fixed bottom spacer so the breathing room below the last entry is
-          // equal across categories regardless of how many defaults exist.
-          Item {
-            width: parent.width
-            implicitHeight: Style.space(12)
           }
         }
       }
