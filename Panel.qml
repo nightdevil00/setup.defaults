@@ -20,8 +20,8 @@ Panel {
     { id: "terminal", label: "Terminal", glyph: "" },
     { id: "editor",   label: "Editor",   glyph: "" },
     { id: "browser",  label: "Browser",  glyph: "" },
-    { id: "video",    label: "Video",    glyph: "󰕬" },
-    { id: "email",    label: "Mail",     glyph: "󰉊" }
+    { id: "video",    label: "Video",    glyph: "" },
+    { id: "email",    label: "Mail",     glyph: "" }
   ]
 
   property string selectedCategory: "browser"
