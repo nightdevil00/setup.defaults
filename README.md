@@ -46,6 +46,16 @@ omarchy-shell shell toggle setup.defaults
 The shell discovers the plugin automatically; no restart is required, but if
 the icon does not appear run `omarchy restart shell`.
 
+## Removal
+
+```bash
+omarchy plugin remove setup.defaults --yes
+```
+
+This disables the plugin and removes it from
+`~/.config/omarchy/plugins/setup.defaults`. Your configured defaults
+(terminal/editor/browser/video/mail) are left untouched.
+
 ## Usage
 
 1. Click the cog icon in the center of the bar (next to Spotify by default).
