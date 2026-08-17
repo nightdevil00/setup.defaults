@@ -56,6 +56,7 @@ BROWSER_APPS=(
   "org.gnome.Epiphany.desktop|Epiphany"
   "qutebrowser.desktop|qutebrowser"
   "waterfox.desktop|Waterfox"
+  "helium.desktop|Helium"
 )
 
 # Editors are stored by binary name (used by `omarchy-launch-editor`).
