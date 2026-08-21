@@ -9,7 +9,7 @@ BarWidget {
   moduleName: "setup.defaults"
 
   readonly property string configuredIcon: setting("iconGlyph", "")
-  readonly property string activeIcon: configuredIcon
+  readonly property string activeIcon: configuredIcon.replace(/</g, "").replace(/>/g, "")
   readonly property bool opened: panelLoader.item ? panelLoader.item.opened === true : false
 
   implicitWidth: button.implicitWidth

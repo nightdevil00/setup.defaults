@@ -107,6 +107,7 @@ Panel {
           implicitHeight: heroIcon.implicitHeight
           Text {
             id: heroIcon
+            textFormat: Text.PlainText
             text: ""
             color: root.fg
             font.family: root.fontFam
@@ -121,6 +122,7 @@ Panel {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Style.space(2)
             Text {
+              textFormat: Text.PlainText
               text: "Default Apps"
               color: root.fg
               font.family: root.fontFam
@@ -129,6 +131,7 @@ Panel {
               width: parent.width
             }
             Text {
+              textFormat: Text.PlainText
               text: "Pick any installed app"
               color: Qt.darker(root.fg, 1.4)
               font.family: root.fontFam
@@ -162,6 +165,7 @@ Panel {
                 spacing: Style.space(1)
                 Text {
                   anchors.horizontalCenter: parent.horizontalCenter
+                  textFormat: Text.PlainText
                   text: modelData.glyph
                   color: modelData.id === root.selectedCategory ? bg : root.fg
                   font.family: root.fontFam
@@ -172,6 +176,7 @@ Panel {
                   width: parent.parent.width - Style.space(8)
                   horizontalAlignment: Text.AlignHCenter
                   elide: Text.ElideRight
+                  textFormat: Text.PlainText
                   text: modelData.label
                   color: modelData.id === root.selectedCategory ? bg : root.fg
                   font.family: root.fontFam
@@ -208,6 +213,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: Style.space(10)
+                textFormat: Text.PlainText
                 text: modelData.name
                 color: modelData.id === root.currentDefault ? Color.accent : root.fg
                 font.family: root.fontFam
@@ -220,6 +226,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: Style.space(10)
+                textFormat: Text.PlainText
                 text: "✓"
                 color: Color.accent
                 font.family: root.fontFam
@@ -235,6 +242,7 @@ Panel {
           Text {
             width: parent.width
             visible: appModel.count === 0
+            textFormat: Text.PlainText
             text: appModel.count === 0 ? "No installed apps detected for this category." : ""
             color: Qt.darker(root.fg, 1.4)
             font.family: root.fontFam
