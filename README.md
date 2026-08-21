@@ -5,7 +5,9 @@ default **terminal, editor, browser, video player, and mail client** — and
 crucially, it is not limited to the handful of apps Omarchy ships defaults
 for. It detects *whatever is actually installed* on your machine (by scanning
 `.desktop` files and `PATH`), so you can pick Vivaldi, gedit, VLC, or anything
-else directly from the bar.
+else directly from the bar. Browsers are discovered dynamically: every
+installed `.desktop` file registering an http/https handler or `text/html`
+shows up automatically, including Flatpak apps and niche browsers.
 
 ![preview](preview.png)
 

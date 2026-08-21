@@ -6,6 +6,8 @@
 # this tool is not limited to a curated list. It discovers whatever
 # applications are actually installed on the system (by scanning .desktop
 # files and PATH) and can set any of them as the default for a category.
+# Browsers are discovered dynamically: every .desktop file registering an
+# http/https handler or text/html shows up, not just the known ones below.
 #
 # Categories: terminal, editor, browser, video, email
 #
@@ -126,15 +128,25 @@ VIDEO_MIMES=(
 # Helpers
 # ---------------------------------------------------------------------------
 
+# Application directories scanned for .desktop files (XDG data dirs first,
+# then Flatpak exports). ~/.local wins over system dirs per XDG precedence.
+app_dirs() {
+  printf '%s\n' "$HOME/.local/share/applications"
+  local d
+  for d in $(printf '%s' "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" | tr ':' ' '); do
+    printf '%s\n' "$d/applications"
+  done
+  printf '%s\n' \
+    /var/lib/flatpak/exports/share/applications \
+    "$HOME/.local/share/flatpak/exports/share/applications"
+}
+
 desktop_exists() {
-  local id="$1"
-  [[ -f "/usr/share/applications/$id" ]] && return 0
-  [[ -f "$HOME/.local/share/applications/$id" ]] && return 0
-  [[ -f "/nix/var/nix/profiles/default/share/applications/$id" ]] && return 0
-  # Flatpak / var locations
-  [[ -f "/var/lib/flatpak/exports/share/applications/$id" ]] && return 0
-  [[ -f "$HOME/.local/share/flatpak/exports/share/applications/$id" ]] && return 0
-  return 1
+  local id="$1" dir
+  while IFS= read -r dir; do
+    [[ -f "$dir/$id" ]] && return 0
+  done < <(app_dirs)
+  [[ -f "/nix/var/nix/profiles/default/share/applications/$id" ]]
 }
 
 binary_exists() {
@@ -143,15 +155,35 @@ binary_exists() {
 
 # Map a desktop id to a friendly name using the Name= field when available.
 desktop_name() {
-  local id="$1" fallback="$2" f
-  for f in "/usr/share/applications/$id" "$HOME/.local/share/applications/$id"; do
+  local id="$1" fallback="$2" dir f n
+  while IFS= read -r dir; do
+    f="$dir/$id"
     if [[ -f "$f" ]]; then
-      local n
       n=$(grep -m1 '^Name=' "$f" 2>/dev/null | sed 's/^Name=//')
       [[ -n "$n" ]] && { printf '%s' "$n"; return; }
     fi
-  done
+  done < <(app_dirs)
   printf '%s' "$fallback"
+}
+
+# Discover every installed .desktop file that can act as a web browser,
+# i.e. one registering an http/https URL handler or text/html in MimeType.
+# First occurrence of an id wins (user-local overrides system).
+list_browser_desktops() {
+  local dir f id
+  local -A seen=()
+  while IFS= read -r dir; do
+    [[ -d "$dir" ]] || continue
+    for f in "$dir"/*.desktop; do
+      [[ -f "$f" ]] || continue
+      id=$(basename "$f")
+      [[ -n "${seen[$id]:-}" ]] && continue
+      if grep -qiE '^MimeType=.*(x-scheme-handler/https?|text/html)' "$f"; then
+        seen[$id]=1
+        printf '%s\n' "$id"
+      fi
+    done
+  done < <(app_dirs)
 }
 
 notify() {
@@ -176,10 +208,20 @@ cmd_list() {
       done
       ;;
     browser)
+      # Union of dynamically discovered browsers and the curated list
+      # (curated entries act as a safety net for broken MimeType data).
+      local -A seen=()
+      local id
+      while IFS= read -r id; do
+        seen[$id]=1
+      done < <(list_browser_desktops)
       for entry in "${BROWSER_APPS[@]}"; do
-        id="${entry%%|*}"; name="${entry##*|}"
-        desktop_exists "$id" && printf '%s\t%s\n' "$id" "$name"
+        id="${entry%%|*}"
+        desktop_exists "$id" && seen[$id]=1
       done
+      for id in "${!seen[@]}"; do
+        printf '%s\t%s\n' "$id" "$(desktop_name "$id" "${id%.desktop}")"
+      done | sort -t "$(printf '\t')" -k2 -f
       ;;
     editor)
       for entry in "${EDITOR_APPS[@]}"; do
